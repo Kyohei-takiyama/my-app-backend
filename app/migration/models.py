@@ -8,7 +8,7 @@ from sqlalchemy.dialects.postgresql import UUID
 
 
 # Engine の作成
-Engine = create_engine(get_env().database_url, encoding="utf-8", echo=False)
+Engine = create_engine(get_env().DATABASE_URL, encoding="utf-8", echo=False)
 
 BaseModel = declarative_base()
 

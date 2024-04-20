@@ -31,7 +31,11 @@ target_metadata = BaseModel.metadata
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-load_dotenv(dotenv_path=os.path.join(PROJECT_ROOT, ".env"))
+load_dotenv(
+    dotenv_path=os.path.join(
+        PROJECT_ROOT + "/core/envs/", f".env.{os.getenv('API_ENV')}"
+    )
+)
 config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
 
 

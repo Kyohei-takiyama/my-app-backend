@@ -1,7 +1,15 @@
 from typing import List
 from fastapi import HTTPException
 from passlib.context import CryptContext
-from .model import RequestUser, ResponseUser, insert, get_all, get_by_id, update, delete
+from .scheme import (
+    RequestUser,
+    ResponseUser,
+    insert,
+    get_all,
+    get_by_id,
+    update,
+    delete,
+)
 
 
 def get_user_all() -> List[ResponseUser]:

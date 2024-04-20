@@ -1,49 +1,40 @@
+import logging
+
 import uvicorn
 from fastapi import FastAPI
-from typing import List
-from user.use_case import (
-    get_user_all,
-    get_user_by_id,
-    create_user,
-    update_user,
-    delete_user,
-)
-from user.model import RequestUser, ResponseUser, UpdateUser
+from fastapi.middleware.cors import CORSMiddleware
+
+from api.main import router as api_router
+from core.config import get_env
+
 
 app = FastAPI()
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+# TODO:Middlewareを用意する
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+@app.get("/health")
+async def health_check():
+    return {"message": "api is running"}
 
 
-@app.get("/apiv1/users/")
-async def retrieve_all() -> List[ResponseUser]:
-    return get_user_all()
+app.include_router(api_router)
 
+# ログ設定
+root_logger = logging.getLogger("app")
+handler = logging.StreamHandler()
+# root_logger.addHandler(handler)
+root_logger.setLevel(logging.DEBUG)
+print(f"load env:::::::::{get_env()}")
 
-@app.get("/apiv1/users/{user_id}")
-async def retrieve_by_id(user_id) -> ResponseUser:
-    return get_user_by_id(user_id)
-
-
-@app.post("/apiv1/users/")
-async def create(user: RequestUser) -> ResponseUser:
-    return create_user(user)
-
-
-@app.put("/apiv1/users/{user_id}")
-async def update(user_id, user: UpdateUser) -> ResponseUser:
-    return update_user(user_id, user)
-
-
-@app.delete("/apiv1/users/{user_id}")
-async def delete(user_id) -> dict:
-    return delete_user(user_id)
-
-
-# login APIはTodo
+# TODO:例外ハンドラーを用意する
+# exceptions.init_app(app)
 
 
 if __name__ == "__main__":
