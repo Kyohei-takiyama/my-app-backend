@@ -13,21 +13,17 @@ class RequestUser(BaseModel):
     password: str
 
 
+class UpdateUser(BaseModel):
+    name: Optional[str]
+    password: Optional[str]
+
+
 class ResponseUser(BaseModel):
     user_id: str
     name: str
     password: str
     created_at: Optional[str]
     updated_at: Optional[str]
-
-
-# # 依存関係
-# def get_db():
-#     db = SessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
 
 
 def get_all() -> List[ResponseUser]:
@@ -57,3 +53,28 @@ def insert(user: RequestUser) -> ResponseUser:
     db.refresh(new_user)
     db.close()
     return new_user
+
+
+def update(user_id: str, user: UpdateUser) -> ResponseUser:
+    db = SessionLocal()
+    db_user = db.query(User).filter(User.user_id == user_id).first()
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    if user.name != "":
+        db_user.name = user.name
+    if user.password != "":
+        db_user.password = user.password
+    db.commit()
+    db.refresh(db_user)
+    db.close()
+    return db_user
+
+
+def delete(user_id: str):
+    db = SessionLocal()
+    db_user = db.query(User).filter(User.user_id == user_id).first()
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    db.delete(db_user)
+    db.commit()
+    db.close()

@@ -1,9 +1,7 @@
 from typing import List
 from fastapi import HTTPException
 from passlib.context import CryptContext
-from sqlalchemy.orm import Session, sessionmaker
-from migration.models import User, Engine
-from .model import RequestUser, ResponseUser, insert, get_all, get_by_id
+from .model import RequestUser, ResponseUser, insert, get_all, get_by_id, update, delete
 
 
 def get_user_all() -> List[ResponseUser]:
@@ -21,6 +19,20 @@ def create_user(user: RequestUser) -> ResponseUser:
     user.password = hashed_password
     inserted_user = insert(user)
     return inserted_user
+
+
+def update_user(user_id: str, user: RequestUser) -> ResponseUser:
+    if user.name is None and user.password is None:
+        raise HTTPException(status_code=400, detail="name or password is required")
+    if user.password != "":
+        user.password = hash_password(user.password)
+    updated_user = update(user_id, user)
+    return updated_user
+
+
+def delete_user(user_id: str):
+    delete(user_id)
+    return {"message": "User deleted successfully"}
 
 
 def hash_password(password):

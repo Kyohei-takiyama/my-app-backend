@@ -1,8 +1,14 @@
 import uvicorn
 from fastapi import FastAPI
 from typing import List
-from user.use_case import get_user_all, get_user_by_id, create_user
-from user.model import RequestUser, ResponseUser
+from user.use_case import (
+    get_user_all,
+    get_user_by_id,
+    create_user,
+    update_user,
+    delete_user,
+)
+from user.model import RequestUser, ResponseUser, UpdateUser
 
 app = FastAPI()
 
@@ -25,6 +31,16 @@ async def retrieve_by_id(user_id) -> ResponseUser:
 @app.post("/apiv1/users/")
 async def create(user: RequestUser) -> ResponseUser:
     return create_user(user)
+
+
+@app.put("/apiv1/users/{user_id}")
+async def update(user_id, user: UpdateUser) -> ResponseUser:
+    return update_user(user_id, user)
+
+
+@app.delete("/apiv1/users/{user_id}")
+async def delete(user_id) -> dict:
+    return delete_user(user_id)
 
 
 # login APIはTodo
