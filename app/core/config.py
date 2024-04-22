@@ -14,6 +14,8 @@ class Environment(BaseSettings):
     FRONTEND_URL: str
     DATABASE_URL: str
     database_url: str
+    SECRET_KEY: str
+    ALGORITHM: str
 
     class Config:
         env = os.getenv("API_ENV", default="local")
