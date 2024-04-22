@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.main import router as api_router
 from core.config import get_env
 
-app = FastAPI()
+app = FastAPI(prefix="/", tags=["healthcheck"])
 
 
 # TODO:Middlewareを用意する

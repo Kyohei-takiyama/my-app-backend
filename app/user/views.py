@@ -11,7 +11,7 @@ from .scheme import RequestUser, ResponseUser, UpdateUser
 from router import APIRouter
 
 
-router = APIRouter(prefix="/api/v1/users")
+router = APIRouter(prefix="/api/v1/users", tags=["users"])
 
 
 @router.get("/")
