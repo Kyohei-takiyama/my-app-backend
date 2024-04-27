@@ -1,9 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, UUID4
 from typing import Optional, List
 from fastapi import HTTPException
 from sqlalchemy.orm import Session, sessionmaker
-from migration.models import Todo, Engine
 from datetime import datetime
+
+from app.migration.models import Todo, Engine
 
 
 class RequestTodo(BaseModel):
@@ -14,7 +15,7 @@ class RequestTodo(BaseModel):
     priority: int
     tags: str
     is_archived: bool
-    user_id: Optional[str]
+    user_id: Optional[UUID4]
 
 
 class ResponseTodo(BaseModel):
@@ -25,7 +26,7 @@ class ResponseTodo(BaseModel):
     priority: int
     tags: str
     is_archived: bool
-    user_id: str
+    user_id: UUID4
 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=Engine)

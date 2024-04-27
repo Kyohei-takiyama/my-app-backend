@@ -1,20 +1,28 @@
-FROM python:3.9-alpine
-
-ENV LANG C.UTF-8
-ENV TZ Asia/Tokyo
-
+# Base stage for shared environment setup
+# ref:Gunicornによる公式Dockerイメージ - Uvicorn
+# ref:https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker?tab=readme-ov-file#tiangolouvicorn-gunicorn-fastapi
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.11-slim AS base
 WORKDIR /app
 
-# pip installs
-COPY ./requirements.txt requirements.txt
+# Install environment dependencies
+RUN apt-get update -yqq \
+    && apt-get install -yqq --no-install-recommends \
+    openssl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apk add --no-cache postgresql-libs \
-    && apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev libffi-dev \
-    && python3 -m pip install -r /app/requirements.txt --no-cache-dir \
-    && apk --purge del .build-deps
+# Builder stage for installing Python dependencies
+FROM base AS builder
+COPY ./requirements.lock .
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.lock
 
-
+# Copy installed packages to a clean Python slim image
+FROM base AS app
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 COPY . /app
 
-# FastAPIの起動
-CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-c", "/app/gunicorn.conf.py", "app.main:app"]
+
+EXPOSE 8080

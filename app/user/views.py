@@ -8,7 +8,7 @@ from .use_case import (
     delete_user,
 )
 from .scheme import RequestUser, ResponseUser, UpdateUser
-from router import APIRouter
+from app.router import APIRouter
 
 
 router = APIRouter(prefix="/api/v1/users", tags=["users"])

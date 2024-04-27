@@ -1,9 +1,10 @@
 from typing import Optional, List
 from fastapi import HTTPException
 from sqlalchemy.orm import Session, sessionmaker
-from migration.models import User, Engine
+from app.migration.models import User, Engine
 from uuid import uuid4
-from pydantic import BaseModel
+from pydantic import BaseModel, UUID4
+from datetime import datetime
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=Engine)
 
@@ -19,11 +20,11 @@ class UpdateUser(BaseModel):
 
 
 class ResponseUser(BaseModel):
-    user_id: str
+    user_id: UUID4
     name: str
     password: str
-    created_at: Optional[str]
-    updated_at: Optional[str]
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
 
 
 def get_all() -> List[ResponseUser]:

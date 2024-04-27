@@ -2,10 +2,10 @@ from fastapi import Depends
 from datetime import timedelta, datetime
 from pydantic import BaseModel
 from sqlalchemy.orm import Session, sessionmaker
-from migration.models import User, Engine
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
-from core.config import get_env
+from app.core.config import get_env
+from app.migration.models import User, Engine
 from jose import jwt
 
 

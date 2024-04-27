@@ -1,7 +1,7 @@
 import os
 
 from functools import lru_cache
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -16,6 +16,7 @@ class Environment(BaseSettings):
     database_url: str
     SECRET_KEY: str
     ALGORITHM: str
+    DEBUG: str
 
     class Config:
         env = os.getenv("API_ENV", default="local")

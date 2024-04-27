@@ -3,13 +3,20 @@ version: "3.7"
 services:
   fastapi:
     container_name: api_todo_service
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
-      - ./app:/app
+      - "./:/app/"
     ports:
-      - 8000:8000
-    restart: always
-    tty: true
+      - "8080:8080"
+    environment:
+      - TZ=Asia/Tokyo
+      - LC_CTYPE=C.UTF-8
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    env_file:
+      - ./app/core/envs/.env.${STAGE}
     depends_on:
       - db
 

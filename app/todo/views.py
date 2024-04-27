@@ -10,9 +10,8 @@ from .use_case import (
     delete_todo,
 )
 from .scheme import RequestTodo, ResponseTodo
-from router import APIRouter
-from user.use_case import get_user_by_id
-from migration.models import User
+from app.router import APIRouter
+from app.user.use_case import get_user_by_id
 
 
 router = APIRouter(prefix="/api/v1/todos", tags=["todos"])

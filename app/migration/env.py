@@ -3,9 +3,9 @@ import sys
 # 相対パスでcoreディレクトリが参照できないので、読み取れるように
 sys.path = ["", ".."] + sys.path[1:]
 import os
-from core.config import PROJECT_ROOT
+from app.core.config import PROJECT_ROOT
 from dotenv import load_dotenv
-from core.config import get_env
+from app.core.config import get_env
 
 from logging.config import fileConfig
 

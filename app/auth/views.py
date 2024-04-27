@@ -1,10 +1,10 @@
 from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
-from migration.models import User
+from app.migration.models import User
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from core.config import get_env
+from app.core.config import get_env
 from .use_case import (
     Token,
     authenticate_user,

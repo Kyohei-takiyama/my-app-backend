@@ -4,8 +4,8 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.main import router as api_router
-from core.config import get_env
+from app.api.main import router as api_router
+from app.core.config import get_env
 
 app = FastAPI(prefix="/", tags=["healthcheck"])
 

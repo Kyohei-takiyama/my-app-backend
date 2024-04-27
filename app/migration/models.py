@@ -13,7 +13,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from core.config import get_env
+from app.core.config import get_env
 from sqlalchemy.dialects.postgresql import UUID
 
 
@@ -21,7 +21,7 @@ database_url: str = get_env().DATABASE_URL
 if database_url is None:
     raise ValueError("DATABASE_URL is not set.")
 # Engine の作成
-Engine = create_engine(database_url, encoding="utf-8", echo=False)
+Engine = create_engine(database_url, echo=False)
 
 BaseModel = declarative_base()
 
