@@ -10,18 +10,18 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=Engine)
 
 
 class RequestUser(BaseModel):
-    name: str
+    username: str
     password: str
 
 
 class UpdateUser(BaseModel):
-    name: Optional[str]
+    username: Optional[str]
     password: Optional[str]
 
 
 class ResponseUser(BaseModel):
     user_id: UUID4
-    name: str
+    username: str
     password: str
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
@@ -48,7 +48,7 @@ def get_by_id(user_id: str) -> ResponseUser:
 def insert(user: RequestUser) -> ResponseUser:
     db = SessionLocal()
 
-    new_user = User(name=user.name, password=user.password)
+    new_user = User(username=user.username, password=user.password)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -61,8 +61,8 @@ def update(user_id: str, user: UpdateUser) -> ResponseUser:
     db_user = db.query(User).filter(User.user_id == user_id).first()
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
-    if user.name != "":
-        db_user.name = user.name
+    if user.username != "":
+        db_user.username = user.username
     if user.password != "":
         db_user.password = user.password
     db.commit()

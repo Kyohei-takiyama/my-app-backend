@@ -7,11 +7,13 @@ from fastapi.security import OAuth2PasswordBearer
 from app.core.config import get_env
 from app.migration.models import User, Engine
 from jose import jwt
+from app.user.scheme import ResponseUser
 
 
 class Token(BaseModel):
     access_token: str
     token_type: str
+    user: ResponseUser
 
 
 env_values = get_env()
@@ -31,9 +33,8 @@ def get_db():
 
 
 def authenticate_user(username: str, password: str) -> User:
-    print(f"authenticate_user ::: {username}, {password}")
     db: Session = next(get_db())
-    user = db.query(User).filter(User.name == username).first()
+    user = db.query(User).filter(User.username == username).first()
     if not user:
         return None
     if not bycrypt_context.verify(password, user.password):
@@ -42,7 +43,6 @@ def authenticate_user(username: str, password: str) -> User:
 
 
 def create_access_token(username: str, user_id: str, expires_delta: timedelta):
-    print(f"create_access_token ::: {username}, {user_id}, {expires_delta}")
     to_encode = {
         "sub": username,
         "user_id": str(user_id),

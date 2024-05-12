@@ -1,35 +1,32 @@
-import logging
-
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.main import router as api_router
 from app.core.config import get_env
+from app.app_logger import logger
 
 app = FastAPI(prefix="/", tags=["healthcheck"])
 
 
 # TODO:Middlewareを用意する
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 @app.get("/health")
 async def health_check():
+    logger.info("health check")
     return {"message": "api is running"}
 
 
 app.include_router(api_router)
 
-# ログ設定
-root_logger = logging.getLogger("app")
-handler = logging.StreamHandler()
-# root_logger.addHandler(handler)
-root_logger.setLevel(logging.DEBUG)
 print(f"load env:::::::::{get_env()}")
 
 # TODO:例外ハンドラーを用意する

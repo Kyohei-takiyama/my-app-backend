@@ -33,11 +33,11 @@ target_metadata = BaseModel.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
-# load_dotenv(
-#     dotenv_path=os.path.join(
-#         PROJECT_ROOT + "/core/envs/", f".env.{os.getenv('API_ENV')}"
-#     )
-# )
+load_dotenv(
+    dotenv_path=os.path.join(
+        PROJECT_ROOT + "/core/envs/", f".env.{os.getenv('API_ENV')}"
+    )
+)
 database_url: str = get_env().DATABASE_URL
 config.set_main_option("sqlalchemy.url", database_url)
 

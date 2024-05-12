@@ -36,7 +36,7 @@ class User(BaseModel):
         unique=True,
         nullable=False,
     )
-    name = Column(String(50), nullable=False)
+    username = Column(String(50), nullable=False)
     password = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.now, nullable=False)  # 追加分
     updated_at = Column(DateTime, default=datetime.now, nullable=False)  # 追加分

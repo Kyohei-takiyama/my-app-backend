@@ -17,6 +17,7 @@ services:
       - PYTHONUNBUFFERED=1
     env_file:
       - ./app/core/envs/.env.${STAGE}
+    # restart:
     depends_on:
       - db
 

@@ -53,6 +53,8 @@ http://localhost:8000/redoc
 
 # Database
 
+### Migration
+
 **precondition**
 
 - docker running
@@ -61,9 +63,24 @@ http://localhost:8000/redoc
 
 - into docker container
 
-```
-docker-compose exec db sh
-```
+  ```
+  docker-compose exec db sh
+  ```
 
-- dummy data
-  - to be continue
+- change derectory app derectory
+
+  ```
+  cd app
+  ```
+
+- make migration file
+
+  ```
+  alembic revision --autogenerate -m "{xxxxxxxxxxxx}"
+  ```
+
+- migration
+
+  ```
+  alembic upgrade head
+  ```
